@@ -10,32 +10,52 @@ from datetime import datetime
 import logging
 import json
 
+
+from .forms import *
+from .decorators import *
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-
 # Create your views here.
 
-
-# Create an `about` view to render a static about page
-# def about(request):
-# ...
-
-
-# Create a `contact` view to return a static contact page
-#def contact(request):
-
 # Create a `login_request` view to handle sign in request
-# def login_request(request):
-# ...
+def loginPage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
 
-# Create a `logout_request` view to handle sign out request
-# def logout_request(request):
-# ...
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect('djangoapp:home')
+            else: 
+                messages.info(request, 'Username OR Password is incorrect')
+
+        context = {}
+        return render(request, 'djangoapp/login.html', context)
+
+def logoutPage(request):
+    logout(request)
+    return redirect('djangoapp:login')
 
 # Create a `registration_request` view to handle sign up request
-# def registration_request(request):
-# ...
+def registrationPage(request):
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + username)
+
+            return redirect('djangoapp:login')
+
+    context = {'form':form}
+    return render(request, 'djangoapp/registration.html', context)
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
