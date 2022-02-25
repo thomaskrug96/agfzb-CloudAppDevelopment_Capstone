@@ -27,7 +27,7 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ['tkrug.mybluemix.net', '127.0.0.1']
+ALLOWED_HOSTS = ['tkrug1.mybluemix.net', '127.0.0.1']
 
 
 # Application definition

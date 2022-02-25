@@ -1,11 +1,11 @@
   applications:
   - name: djangoapp
     routes:
-      - route: tkrug.mybluemix.net
+      - route: tkrug1.mybluemix.net
     memory: 128M
     buildpack: python_buildpack
   - name: djangoapp-nginx
     routes:
-      - route: tkrug.mybluemix.net/static
+      - route: tkrug1.mybluemix.net/static
     memory: 128M
     buildpack: staticfile_buildpack
