@@ -1,6 +1,33 @@
 from django.db import models
 from django.utils.timezone import now
 
+car_types = (
+    ('Sedan', u'Sedan'),
+    ('SUV', u'SUV'),
+    ('Wagon', u'Wagon'),
+)
+
+# Create your models here.
+
+class CarMake(models.Model):
+    name = models.CharField(max_length=200, null=True)
+    description = models.CharField(max_length=200, null=True)
+
+    def __str__(self):
+        return self.name
+
+class CarModel(models.Model):
+    car_make = models.ForeignKey(CarMake, null=True, on_delete=models.SET_NULL)
+    name = models.CharField(max_length=200, null=True)
+    dealer_id = models.IntegerField()
+    car_type = models.CharField(max_length=200, choices=car_types,  null=True)
+    year = models.DateField()
+
+    def __str__(self):
+        return self.car_make
+
+# <HINT> Create a plain Python class `CarDealer` to hold dealer data
+# <HINT> Create a plain Python class `DealerReview` to hold review data
 
 # Create your models here.
 
@@ -21,7 +48,3 @@ from django.utils.timezone import now
 # - __str__ method to print a car make object
 
 
-# <HINT> Create a plain Python class `CarDealer` to hold dealer data
-
-
-# <HINT> Create a plain Python class `DealerReview` to hold review data

@@ -12,6 +12,12 @@ from cloudant.error import CloudantException
 import requests
 
 
+myDict = {
+    "COUCH_URL": "https://59e8d0a8-4b92-4e5f-b6e9-97065c14665c-bluemix.cloudantnosqldb.appdomain.cloud",
+    "IAM_API_KEY": "gmRktU8iPRLIMuP7TU0KxMV0bJZ3VYKw7opsQpCqCGEW",
+    "COUCH_USERNAME": "59e8d0a8-4b92-4e5f-b6e9-97065c14665c-bluemix"
+}
+
 def main(dict):
     databaseName = "dealerships"
 
@@ -30,3 +36,5 @@ def main(dict):
         return {"error": err}
 
     return {"dbs": client.all_dbs()}
+
+test = main(myDict)
