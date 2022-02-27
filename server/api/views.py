@@ -11,6 +11,27 @@ cloudant_credentials = {
 }
 
 
+def main_filtered(dict, databaseName, pk, val):
+    try:
+        client = Cloudant.iam(
+            account_name=dict["COUCH_USERNAME"],
+            api_key=dict["IAM_API_KEY"],
+            connect=True,
+        )
+
+        db = client[databaseName]
+
+        selector = {pk: {'$eq': val}}
+        result = db.get_query_result(selector).all()
+        print(result[0])
+    except CloudantException as ce:
+        print("unable to connect")
+        return {"error": ce}
+    except (requests.exceptions.RequestException, ConnectionResetError) as err:
+        print("connection error")
+        return {"error": err}
+    return result
+
 def main(dict, databaseName):
     try:
         client = Cloudant.iam(
@@ -18,6 +39,8 @@ def main(dict, databaseName):
             api_key=dict["IAM_API_KEY"],
             connect=True,
         )
+        print('YOU CALLED MAIN')
+
         print("Databases: {0}".format(client.all_dbs()))
 
         db = client[databaseName]
@@ -39,11 +62,16 @@ def main(dict, databaseName):
     return result
 
 @api_view(['GET'])
+def get_dealerships_filtered(request, pk, val):
+    #person = {'name':'Dennis', 'age':28}
+    data = main_filtered(cloudant_credentials, 'dealerships', pk, val)
+    return Response(data)
+
+@api_view(['GET'])
 def get_dealerships(request):
     #person = {'name':'Dennis', 'age':28}
     data = main(cloudant_credentials, 'dealerships')
     return Response(data)
-
 
 @api_view(['GET'])
 def get_reviews(request):
