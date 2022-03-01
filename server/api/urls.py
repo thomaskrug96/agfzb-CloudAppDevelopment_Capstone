@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('dealerships/', views.get_dealerships),
     path('dealerships/<str:pk>/<str:val>/', views.get_dealerships_filtered),
+    path('reviews/<str:pk>/<int:val>/', views.get_reviews_filtered),
     #path('dealerships/(?P<pk>\w+)', views.get_dealerships_filtered),
     path('reviews/', views.get_reviews),
 ]

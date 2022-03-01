@@ -26,8 +26,19 @@ class CarModel(models.Model):
     def __str__(self):
         return self.car_make
 
+
+class DealerReview(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=200, null=True)
+    dealership = models.CharField(max_length=200, null=True)
+    review = models.CharField(max_length=500, null=True)
+    purchase = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.id
 # <HINT> Create a plain Python class `CarDealer` to hold dealer data
 # <HINT> Create a plain Python class `DealerReview` to hold review data
+
 
 # Create your models here.
 
@@ -46,5 +57,3 @@ class CarModel(models.Model):
 # - Year (DateField)
 # - Any other fields you would like to include in car model
 # - __str__ method to print a car make object
-
-

@@ -16,9 +16,34 @@ client = Cloudant.iam(
             connect=True,
 )
 
-dbName = 'dealerships'
-pk = 'state'
-val = 'Texas'
+dbName = 'reviews'
+db = client[dbName]
+
+# Get number of documents in reviews db
+i=0
+for doc in db:
+    i = i+1
+
+# Initialize new document for POST request
+doc = {}
+doc['id'] = i+1
+doc['name'] = 'test'
+doc['dealership'] = 15
+doc['review'] = 'Good stuff'
+doc['purchase'] = False
+
+print(doc)
+
+db.create_document(doc, throw_on_exists=False)
+
+for doc in db:
+    print(doc)
+
+'''
+dbName = 'reviews'
+pk = 'id'
+val = 1
+print(type(val))
 
 db = client[dbName]
 
@@ -26,56 +51,5 @@ selector = {pk: {'$eq': val}}
 docs = db.get_query_result(selector)
 for doc in docs:
     print(doc)
-
-result = {}
-for instance in docs.items():
-    result[i] = instance 
-
-
-
-
-
-
-
-
-
-
-'''
-
-
-def main_filtered(dict, dbName, pk, val):
-    try:
-        client = Cloudant.iam(
-            account_name=dict["COUCH_USERNAME"],
-            api_key=dict["IAM_API_KEY"],
-            connect=True,
-        )
-
-        print('YOU CALLED MAIN_FILTERED')
-        print('YOUR PRIMARY KEY IS = ' + pk)
-        print('YOUR VAL IS = ' + val)
-        db = client[dbName]
-
-        selector = {pk: {'$eq': val}}
-        docs = db.get_query_result(selector)
-        for doc in docs:
-            print(doc)
-        
-        result = {}
-        for i, instance in docs.items():
-            result[i] = instance 
-
-    except CloudantException as ce:
-        print("unable to connect")
-        return {"error": ce}
-    except (requests.exceptions.RequestException, ConnectionResetError) as err:
-        print("connection error")
-        return {"error": err}
-    return result
-
-result = main_filtered(myDict, dbName, 'state', 'Texas')
-
-print(result)
-
 
 '''

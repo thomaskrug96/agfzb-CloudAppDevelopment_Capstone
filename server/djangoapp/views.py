@@ -10,6 +10,10 @@ from datetime import datetime
 import logging
 import json
 
+from zlib import DEF_BUF_SIZE
+from cloudant.client import Cloudant
+from cloudant.error import CloudantException
+
 
 from .forms import *
 from .decorators import *
@@ -81,4 +85,49 @@ def contactPage(request):
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
 # ...
+
+# Create a `registration_request` view to handle sign up request
+# Create a `registration_request` view to handle sign up request
+def add_review(request):
+    if request.method == 'POST':
+        form = CreateReviewForm(request.POST)
+        if form.is_valid():
+            myDict = {
+                "COUCH_URL": "https://59e8d0a8-4b92-4e5f-b6e9-97065c14665c-bluemix.cloudantnosqldb.appdomain.cloud",
+                "IAM_API_KEY": "gmRktU8iPRLIMuP7TU0KxMV0bJZ3VYKw7opsQpCqCGEW",
+                "COUCH_USERNAME": "59e8d0a8-4b92-4e5f-b6e9-97065c14665c-bluemix"
+            }
+
+            client = Cloudant.iam(
+                        account_name=myDict["COUCH_USERNAME"],
+                        api_key=myDict["IAM_API_KEY"],
+                        connect=True,
+            )
+
+            dbName = 'reviews'
+            db = client[dbName]
+
+            # Get number of documents in reviews db
+            i=0
+            for doc in db:
+                i = i+1
+
+            # Initialize new document for POST request
+            doc = {}
+            doc['id'] = i+1
+            doc['name'] = form['name'].data
+            doc['dealership'] = form['dealership'].data
+            doc['review'] = form['review'].data
+            doc['purchase'] = form['purchase'].data
+
+            print(doc)
+
+            db.create_document(doc, throw_on_exists=False)
+            messages.success(request, 'success!')
+            return redirect('djangoapp:home')
+    else:
+        form = CreateReviewForm()
+
+    context = {'form':form}
+    return render(request, 'djangoapp/add_review.html', context)
 

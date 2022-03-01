@@ -80,3 +80,8 @@ def get_reviews(request):
     data = main(cloudant_credentials, 'reviews')
     return Response(data)
 
+@api_view(['GET'])
+def get_reviews_filtered(request, pk, val):
+    #person = {'name':'Dennis', 'age':28}
+    data = main_filtered(cloudant_credentials, 'reviews', pk, val)
+    return Response(data)

@@ -25,5 +25,6 @@ urlpatterns = [
     # path for dealer reviews view
 
     # path for add a review view
+    path('add_review/', views.add_review, name="add_review")
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
