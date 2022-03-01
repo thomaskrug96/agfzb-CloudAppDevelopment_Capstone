@@ -9,24 +9,16 @@ car_types = (
 
 # Create your models here.
 
-class CarMake(models.Model):
+class CarDealer(models.Model):
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=200, null=True)
-    description = models.CharField(max_length=200, null=True)
+    city = models.CharField(max_length=200, null=True)
+    state = models.CharField(max_length=200, null=True)
+    address = models.CharField(max_length=200, null=True)
 
     def __str__(self):
         return self.name
-
-class CarModel(models.Model):
-    car_make = models.ForeignKey(CarMake, null=True, on_delete=models.SET_NULL)
-    name = models.CharField(max_length=200, null=True)
-    dealer_id = models.IntegerField()
-    car_type = models.CharField(max_length=200, choices=car_types,  null=True)
-    year = models.DateField()
-
-    def __str__(self):
-        return self.car_make
-
-
+    
 class DealerReview(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=200, null=True)
@@ -36,6 +28,25 @@ class DealerReview(models.Model):
 
     def __str__(self):
         return self.id
+
+class CarMake(models.Model):
+    name = models.CharField(max_length=200, null=True)
+    description = models.CharField(max_length=200, null=True)
+
+    def __str__(self):
+        return self.name
+
+class CarModel(models.Model):
+    car_make = models.ForeignKey(CarMake, null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200, null=True)
+    dealer_id = models.IntegerField()
+    car_type = models.CharField(max_length=200, choices=car_types,  null=True)
+    year = models.DateField()
+
+    def __str__(self):
+        return self.car_make
+
+
 # <HINT> Create a plain Python class `CarDealer` to hold dealer data
 # <HINT> Create a plain Python class `DealerReview` to hold review data
 
