@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from cloudant.client import Cloudant
 from cloudant.error import CloudantException
 import requests
+import json
 
 cloudant_credentials = {
     "COUCH_URL": "https://59e8d0a8-4b92-4e5f-b6e9-97065c14665c-bluemix.cloudantnosqldb.appdomain.cloud",
@@ -22,8 +23,8 @@ def main_filtered(dict, databaseName, pk, val):
         db = client[databaseName]
 
         selector = {pk: {'$eq': val}}
-        result = db.get_query_result(selector).all()
-        print(result[0])
+        result = db.get_query_result(selector, raw_result=True)
+
     except CloudantException as ce:
         print("unable to connect")
         return {"error": ce}
@@ -39,19 +40,14 @@ def main(dict, databaseName):
             api_key=dict["IAM_API_KEY"],
             connect=True,
         )
-        print('YOU CALLED MAIN')
-
-        print("Databases: {0}".format(client.all_dbs()))
 
         db = client[databaseName]
         
-        for instance in db:
-            print(instance)
-        
-        result = {}
-    
-        for i, instance in db.items():
-            result[i] = instance 
+        result = db.all_docs(include_docs=True)
+        print('*****************************')
+        print(type(result))
+        print('*****************************')
+
 
     except CloudantException as ce:
         print("unable to connect")

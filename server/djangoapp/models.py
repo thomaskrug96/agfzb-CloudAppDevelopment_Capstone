@@ -9,15 +9,20 @@ car_types = (
 
 # Create your models here.
 
-class CarDealer(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=200, null=True)
-    city = models.CharField(max_length=200, null=True)
-    state = models.CharField(max_length=200, null=True)
-    address = models.CharField(max_length=200, null=True)
+class CarDealer:
+    def __init__(self, address, city, full_name, id, lat, long, short_name, st, zip):
+        self.address = address
+        self.city = city
+        self.full_name = full_name
+        self.id = id
+        self.lat = lat
+        self.long = long
+        self.short_name = short_name
+        self.st = st
+        self.zip = zip
 
     def __str__(self):
-        return self.name
+        return "Dealer name: " + self.full_name
     
 class DealerReview(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -44,7 +49,7 @@ class CarModel(models.Model):
     year = models.DateField()
 
     def __str__(self):
-        return self.car_make
+        return self.name
 
 
 # <HINT> Create a plain Python class `CarDealer` to hold dealer data

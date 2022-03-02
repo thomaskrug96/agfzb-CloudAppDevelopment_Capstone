@@ -10,6 +10,7 @@ from datetime import datetime
 import logging
 import json
 
+from .restapis import *
 from zlib import DEF_BUF_SIZE
 from cloudant.client import Cloudant
 from cloudant.error import CloudantException
@@ -63,10 +64,36 @@ def registrationPage(request):
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
-    context = {}
     if request.method == "GET":
-        return render(request, 'djangoapp/index.html', context)
+        url = 'http://127.0.0.1:8000/api/dealerships/'
+        # Get dealers from the URL
+        dealerships = get_dealers_from_cf(url)
+        # Concat all dealer's short name
+        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        # Return a list of dealer short name
+        return HttpResponse(dealer_names)
 
+# Update the `get_dealerships` view to render the index page with a list of dealerships
+def get_dealerships_by_id(request, pk, val):
+    if request.method == "GET":
+        url = 'http://127.0.0.1:8000/api/dealerships/' + pk +'/' + val + '/'
+        print(url)
+        # Get dealers from the URL
+        dealerships = get_dealers_from_cf(url)
+        # Concat all dealer's short name
+        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        # Return a list of dealer short name
+        return HttpResponse(dealer_names)
+
+def get_dealerships_by_state(request, pk, val):
+    if request.method == "GET":
+        url = 'http://127.0.0.1:8000/api/dealerships/' + pk +'/' + val + '/'
+        # Get dealers from the URL
+        dealerships = get_dealers_from_cf(url)
+        # Concat all dealer's short name
+        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        # Return a list of dealer short name
+        return HttpResponse(dealer_names)
 
 def aboutPage(request):
     context = {}
