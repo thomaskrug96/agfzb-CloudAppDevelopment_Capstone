@@ -1,6 +1,6 @@
 import requests
 import json
-from .models import CarDealer
+from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
 
 def get_request(url, **kwargs):
@@ -37,6 +37,54 @@ def get_dealers_from_cf(url, **kwargs):
 
     return results
 
+def get_dealers_from_dict(url, **kwargs):
+    results = []
+    # Call get_request with a URL parameter
+    json_result = get_request(url)
+    if json_result:
+        # Get the row list in JSON as dealers
+        dealers = json_result["rows"]
+        # For each dealer object
+        for dealer in dealers:
+            # Get its content in `doc` object
+            dealer_doc = dealer["doc"]
+            # Create a CarDealer object with values in `doc` object
+            dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"], full_name=dealer_doc["full_name"],
+                                   id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
+                                   short_name=dealer_doc["short_name"],
+                                   st=dealer_doc["st"], zip=dealer_doc["zip"])
+            results.append(dealer_obj)
+
+    return results
+
+def get_reviews_from_dict(url, **kwargs):
+    results = []
+    # Call get_request with a URL parameter
+    json_result = get_request(url)
+    if json_result:
+        # Get the row list in JSON as dealers
+        dealers = json_result["rows"]
+        # For each dealer object
+        for dealer in dealers:
+            # Get its content in `doc` object
+            dealer_doc = dealer["doc"]
+            # Create a CarDealer object with values in `doc` object
+            dealer_obj = DealerReview(
+                dealership=dealer_doc["dealership"], 
+                name=dealer_doc["name"], 
+                purchase=dealer_doc["purchase"],
+                review=dealer_doc["review"], 
+                purchase_date=dealer_doc["purchase_date"], 
+                car_make=dealer_doc["car_make"],
+                car_model=dealer_doc["car_model"],
+                car_year=dealer_doc["car_year"], 
+                sentiment=dealer_doc["sentiment"],
+                id=dealer_doc["id"]
+            )
+
+            results.append(dealer_obj)
+
+    return results
 
 # Create a `get_request` to make HTTP GET requests
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},

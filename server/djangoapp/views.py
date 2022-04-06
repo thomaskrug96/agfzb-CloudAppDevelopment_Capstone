@@ -67,7 +67,7 @@ def get_dealerships(request):
     if request.method == "GET":
         url = 'http://127.0.0.1:8000/api/dealerships/'
         # Get dealers from the URL
-        dealerships = get_dealers_from_cf(url)
+        dealerships = get_dealers_from_dict(url)
         # Concat all dealer's short name
         dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
         # Return a list of dealer short name
