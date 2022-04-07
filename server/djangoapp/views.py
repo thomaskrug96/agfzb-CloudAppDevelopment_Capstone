@@ -10,6 +10,8 @@ from datetime import datetime
 import logging
 import json
 
+from .models import CarMake, CarModel
+
 from .restapis import *
 from zlib import DEF_BUF_SIZE
 from cloudant.client import Cloudant
@@ -26,7 +28,7 @@ logger = logging.getLogger(__name__)
 # Create a `login_request` view to handle sign in request
 def loginPage(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('index') # note: may need to change this back to 'home' at some point
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -36,7 +38,7 @@ def loginPage(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('djangoapp:home')
+                return redirect('djangoapp:index')
             else: 
                 messages.info(request, 'Username OR Password is incorrect')
 
@@ -68,10 +70,26 @@ def get_dealerships(request):
         url = 'http://127.0.0.1:8000/api/dealerships/'
         # Get dealers from the URL
         dealerships = get_dealers_from_dict(url)
+
         # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        dealers = {}
+        for dealer in dealerships:
+            name = dealer.full_name
+            dealers[name] = {
+                'id': dealer.id,
+                'name': dealer.full_name,
+                'address': dealer.address,
+                'city': dealer.city,
+                'state': dealer.st
+            }
+        print(list(dealers.values()))
+        context = {'dealers': list(dealers.values())}
+        #dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        print('get ready for the bang!')
+        print(dealers)
         # Return a list of dealer short name
-        return HttpResponse(dealer_names)
+        return render(request, 'djangoapp/index.html', context)
+        #return HttpResponse(dealerships)
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships_by_id(request, pk, val):
@@ -139,11 +157,13 @@ def add_review(request):
             for doc in db:
                 i = i+1
 
+            # Get dealership id from url params
+            id = request.GET.get('id')
             # Initialize new document for POST request
             doc = {}
             doc['id'] = i+1
+            doc['dealership'] = id
             doc['name'] = form['name'].data
-            doc['dealership'] = form['dealership'].data
             doc['review'] = form['review'].data
             doc['purchase'] = form['purchase'].data
 
@@ -151,10 +171,16 @@ def add_review(request):
 
             db.create_document(doc, throw_on_exists=False)
             messages.success(request, 'success!')
-            return redirect('djangoapp:home')
+            return redirect('djangoapp:index')
+        else:
+            messages.error(request, 'Failure!')
+            return redirect('djangoapp:contact')
     else:
+        car_makes = CarMake.objects.all()
+        car_models = CarModel.objects.all()
+
         form = CreateReviewForm()
+        print(form)
 
-    context = {'form':form}
-    return render(request, 'djangoapp/add_review.html', context)
-
+        context = {'form':form, 'car_makes': car_makes, 'car_model': car_models}
+        return render(request, 'djangoapp/add_review.html', context)

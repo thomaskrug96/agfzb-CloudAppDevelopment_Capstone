@@ -14,9 +14,9 @@ class CreateUserForm(UserCreationForm):
 
 class CreateReviewForm(forms.Form):
     name = forms.CharField(label='name', max_length=200)
-    dealership = forms.CharField(label='name', max_length=200)
     review = forms.CharField(label='name', max_length=500)
-    purchase = forms.BooleanField(required=True)
+    purchase = forms.BooleanField(required=False)
 
     def save():
         print('you did it!')
+

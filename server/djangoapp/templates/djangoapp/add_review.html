@@ -18,41 +18,33 @@
                     <div class="d-flex justify-content-center form_container">
                         <form method="POST" action="">
                             {% csrf_token %}
-                            <h5>User Name</h5>
+
+                            <h5>Name</h5>
                             <div class="input-group mb-3">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                </div>
                                 {{form.name}}
                             </div>
-                            <h5>First Name</h5>
-                            <div class="input-group mb-2">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
-                                </div>
-                                {{form.dealership}}
-                            </div>
-                            <h5>Last Name</h5>
-                            <div class="input-group mb-2">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
+
+                            <h5>Review</h5>
+                            <div class="input-lg">
                                 {{form.review}}
                             </div>
-                            <h5>Password</h5>
+
+                            <h5>Purchase</h5>
                             <div class="input-group mb-2">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
                                 {{form.purchase}}
                             </div>
 
                             <div class="d-flex justify-content-center mt-3 login_container">
                                 <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
                             </div>
+
                         </form>
                     </div>
-            
+                    <p>test</p>
+                    {% for model in car_models %}
+                        {{model.car_make}}
+                        {{model.name}}
+                    {% endfor %}
                     {{form.errors}}
                 </div>
             </div>
@@ -65,9 +57,8 @@
             //Query All input fields
             var form_fields = document.getElementsByTagName('input')
             form_fields[1].placeholder='Name';
-            form_fields[2].placeholder='Dealership';
-            form_fields[3].placeholder='Review';
-
+            form_fields[2].placeholder='Review';
+            form_fields[3].placeholder='Purchase';
 
             for (var field in form_fields){	
                 form_fields[field].className += ' form-control'

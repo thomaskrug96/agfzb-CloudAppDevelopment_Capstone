@@ -19,10 +19,11 @@ def get_request(url, **kwargs):
     return json_data
 
 def get_dealers_from_cf(url, **kwargs):
-    results = []
+    results = {}
     # Call get_request with a URL parameter
     json_result = get_request(url)
     if json_result:
+        print(json_result)
         for objects in json_result:
             if isinstance(json_result[objects], list):
                 dealers = json_result[objects]

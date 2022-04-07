@@ -5,19 +5,21 @@
 <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
+        <th scope="col">Dealership</th>
+        <th scope="col">Address</th>
+        <th scope="col">City</th>
+        <th scope="col">State</th>
+        <th scope="col">Add Review</th>
       </tr>
     </thead>
     <tbody>
-    {% for dealership in dealerships %}
+    {% for dealership in dealers %}
         <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+            <th scope="row">{{dealership.name}}</th>
+            <td>{{dealership.address}}</td>
+            <td>{{dealership.city}}</td>
+            <td>{{dealership.state}}</td>
+            <td><a class="btn btn-sm btn-info" href="{% url 'djangoapp:add_review' %}?id={{dealership.id}}">Add Review</a></td>
         </tr>
     {% endfor %}
     </tbody>
