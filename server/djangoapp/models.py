@@ -8,38 +8,6 @@ car_types = (
 )
 
 # Create your models here.
-
-class CarDealer:
-    def __init__(self, address, city, full_name, id, lat, long, short_name, st, zip):
-        self.address = address
-        self.city = city
-        self.full_name = full_name
-        self.id = id
-        self.lat = lat
-        self.long = long
-        self.short_name = short_name
-        self.st = st
-        self.zip = zip
-
-    def __str__(self):
-        return self.full_name
-    
-class DealerReview:
-    def __init__(self, dealership, name, purchase, review, purchase_date, car_make, car_model, car_year, sentiment, id):
-        self.dealership = dealership
-        self.name = name
-        self.purchase = purchase
-        self.review = review
-        self.purchase_date = purchase_date
-        self.car_make = car_make
-        self.car_model = car_model
-        self.car_year = car_year
-        self.sentiment = sentiment
-        self.id = id
-
-    def __str__(self):
-        return "Review name: " + self.dealership + ": " + self.car_year + " " + self.car_make
-
 class CarMake(models.Model):
     name = models.CharField(max_length=200, null=True)
     description = models.CharField(max_length=200, null=True)
@@ -57,10 +25,59 @@ class CarModel(models.Model):
     def __str__(self):
         return self.name
 
+class CarDealer(models.Model):
+    def __init__(self, address, city, full_name, dealer_id, lat, long, short_name, st, zip):
+        self.address = address
+        self.city = city
+        self.full_name = full_name
+        self.dealer_id = dealer_id
+        self.lat = lat
+        self.long = long
+        self.short_name = short_name
+        self.st = st
+        self.zip = zip
+
+    address = models.CharField(max_length=200, null=True)
+    city = models.CharField(max_length=200, null=True)
+    full_name = models.CharField(max_length=200, null=True)
+    dealer_id = models.IntegerField(default=0)
+    lat = models.FloatField(default=0)
+    long = models.FloatField(default=0)
+    short_name = models.CharField(max_length=200, null=True)
+    st = models.CharField(max_length=200, null=True)
+    zip = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.full_name
+
+class DealerReview(models.Model):
+    def __init__(self, dealer_id, name, purchase, review, purchase_date, car_make, car_model, car_year, sentiment, review_id):
+        self.dealer_id = dealer_id
+        self.name = name
+        self.purchase = purchase
+        self.review = review
+        self.purchase_date = purchase_date
+        self.car_make = car_make
+        self.car_model = car_model
+        self.car_year = car_year
+        self.sentiment = sentiment
+        self.review_id = review_id
+
+    dealer_id = models.ForeignKey(CarDealer, null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200, null=True)
+    purchase = models.BooleanField(null=True)
+    review = models.CharField(max_length=1000, null=True)
+    purchase_date = models.DateField(null=True)
+    car_make = models.ForeignKey(CarMake, null=True, on_delete=models.CASCADE)
+    car_model = models.ForeignKey(CarModel, null=True, on_delete=models.CASCADE)
+    sentiment = models.CharField(max_length=200, null=True)
+    review_id = models.IntegerField()
+
+    def __str__(self):
+        return "Review name: " + self.dealer_id + ": " + self.car_year + " " + self.car_make
 
 # <HINT> Create a plain Python class `CarDealer` to hold dealer data
 # <HINT> Create a plain Python class `DealerReview` to hold review data
-
 
 # Create your models here.
 

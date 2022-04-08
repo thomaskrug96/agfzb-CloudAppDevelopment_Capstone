@@ -13,4 +13,3 @@ urlpatterns = [
 url(r'^emp_detail/(?P<user_name>\w+)/(?P<mobile_number>\d{10,18})/$', 
 views.emp_detail, name='emp_detail'),
 '''
-

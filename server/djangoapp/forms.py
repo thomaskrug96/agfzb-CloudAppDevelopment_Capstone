@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
-from .models import DealerReview
+from .models import DealerReview, CarDealer
 
 
 class CreateUserForm(UserCreationForm):
@@ -19,4 +19,20 @@ class CreateReviewForm(forms.Form):
 
     def save():
         print('you did it!')
+'''
+class CreateCarDealerForm(forms.Form):
+    address = forms.CharField(label='address', max_length=200)
+    city = forms.CharField(label='address', max_length=200)
+    full_name = forms.CharField(label='address', max_length=200)
+    dealer_id = forms.IntegerField(label='dealer_id')
+    lat = forms.FloatField(label='lat')
+    long = forms.FloatField(label='lat')
+    short_name = forms.CharField(label='short_name', max_length=200)
+    st = forms.CharField(label='st', max_length=200)
+    zip = forms.IntegerField(label='zip')
+'''
 
+class CreateCarDealerForm(forms.Form):
+    class Meta:
+        model = CarDealer
+        fields = '__all__'

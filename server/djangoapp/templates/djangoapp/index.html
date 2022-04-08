@@ -14,13 +14,13 @@
     </thead>
     <tbody>
     {% for dealership in dealers %}
-        <tr>
-            <th scope="row">{{dealership.name}}</th>
-            <td>{{dealership.address}}</td>
-            <td>{{dealership.city}}</td>
-            <td>{{dealership.state}}</td>
-            <td><a class="btn btn-sm btn-info" href="{% url 'djangoapp:add_review' %}?id={{dealership.id}}">Add Review</a></td>
-        </tr>
+      <tr>
+          <th scope="row">{{dealership.name}}</th>
+          <td>{{dealership.address}}</td>
+          <td>{{dealership.city}}</td>
+          <td>{{dealership.state}}</td>
+          <td><a class="btn btn-sm btn-info" href="{% url 'djangoapp:add_review' %}?dealership={{dealership.dealer_id}}">Add Review</a></td>
+      </tr>
     {% endfor %}
     </tbody>
   </table>

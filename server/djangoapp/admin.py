@@ -10,6 +10,10 @@ class CarMakeAdmin(admin.ModelAdmin):
     class Meta: 
         model = CarMake
 
-admin.site.register(CarMake, CarMakeAdmin)
+class DealerReviewlInline(admin.TabularInline):
+    model = DealerReview
+    extra = 0
 
+admin.site.register(CarMake, CarMakeAdmin)
 admin.site.register(CarModel)
+

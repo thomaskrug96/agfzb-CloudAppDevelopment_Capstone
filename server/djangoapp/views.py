@@ -17,7 +17,6 @@ from zlib import DEF_BUF_SIZE
 from cloudant.client import Cloudant
 from cloudant.error import CloudantException
 
-
 from .forms import *
 from .decorators import *
 # Get an instance of a logger
@@ -68,26 +67,23 @@ def registrationPage(request):
 def get_dealerships(request):
     if request.method == "GET":
         url = 'http://127.0.0.1:8000/api/dealerships/'
+
         # Get dealers from the URL
         dealerships = get_dealers_from_dict(url)
 
-        # Concat all dealer's short name
+        # Add relevant dealer info to list of dealer values
         dealers = {}
-        for dealer in dealerships:
-            name = dealer.full_name
-            dealers[name] = {
-                'id': dealer.id,
-                'name': dealer.full_name,
-                'address': dealer.address,
-                'city': dealer.city,
-                'state': dealer.st
+        for dealer in range(0, len(dealerships)):
+            dealers[dealer] = {
+                'dealer_id': dealerships[dealer].dealer_id,
+                'name': dealerships[dealer].full_name,
+                'address': dealerships[dealer].address,
+                'city': dealerships[dealer].city,
+                'state': dealerships[dealer].st
             }
-        print(list(dealers.values()))
+
         context = {'dealers': list(dealers.values())}
-        #dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        print('get ready for the bang!')
-        print(dealers)
-        # Return a list of dealer short name
+
         return render(request, 'djangoapp/index.html', context)
         #return HttpResponse(dealerships)
 
@@ -152,35 +148,42 @@ def add_review(request):
             dbName = 'reviews'
             db = client[dbName]
 
-            # Get number of documents in reviews db
+            # Get number of documents in reviews db. The next id will be incremented
             i=0
             for doc in db:
                 i = i+1
+            id = i+1
 
             # Get dealership id from url params
-            id = request.GET.get('id')
+            dealer_id = request.GET.get('id')
+
             # Initialize new document for POST request
             doc = {}
-            doc['id'] = i+1
-            doc['dealership'] = id
+            doc['id'] = id
+            doc['dealership'] = int(dealer_id)
             doc['name'] = form['name'].data
             doc['review'] = form['review'].data
             doc['purchase'] = form['purchase'].data
 
-            print(doc)
-
+            # create doc in cloudant db
             db.create_document(doc, throw_on_exists=False)
             messages.success(request, 'success!')
             return redirect('djangoapp:index')
         else:
+            # Failed attempt to create review. Alert user and send to contact site.
             messages.error(request, 'Failure!')
             return redirect('djangoapp:contact')
     else:
         car_makes = CarMake.objects.all()
         car_models = CarModel.objects.all()
 
+        review_id = str(request.GET.get('dealership'))
+        print(review_id)
+        url = 'http://127.0.0.1:8000/api/reviews/dealership/' + review_id 
+        print(url)
+        reviews = get_reviews_from_dict(url)
         form = CreateReviewForm()
-        print(form)
-
-        context = {'form':form, 'car_makes': car_makes, 'car_model': car_models}
+        print('**************')
+        print(reviews)
+        context = {'form':form, 'reviews':reviews, 'car_makes': car_makes, 'car_model': car_models}
         return render(request, 'djangoapp/add_review.html', context)

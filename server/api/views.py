@@ -25,10 +25,6 @@ def main_filtered(dict, databaseName, pk, val):
         selector = {pk: {'$eq': val}}
         result = db.get_query_result(selector, raw_result=True)
 
-        print('*****************************')
-        print('YOU ARE IN API/MAIN_FILTERED')
-        print('*****************************')
-
     except CloudantException as ce:
         print("unable to connect")
         return {"error": ce}
@@ -70,7 +66,6 @@ def get_dealerships_filtered(request, pk, val):
 
 @api_view(['GET'])
 def get_dealerships(request):
-    print('YOU MADE IT THIS FAR')
     data = main(cloudant_credentials, 'dealerships')
     return Response(data)
 
