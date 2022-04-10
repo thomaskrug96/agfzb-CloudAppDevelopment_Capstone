@@ -90,7 +90,7 @@ def get_dealerships(request):
 
         return render(request, 'djangoapp/index.html', context)
         #return HttpResponse(dealerships)
-    if request.method == "POST":
+
 
 
 
