@@ -66,7 +66,7 @@ def registrationPage(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
     if request.method == "GET":
-        url = 'http://127.0.0.1:8000/api/dealerships/'
+        url = 'http://tkrug1.mybluemix.net/api/dealerships/'
 
         # Get dealers from the URL
         dealerships = get_dealers_from_dict(url)
@@ -98,7 +98,7 @@ def get_dealerships(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships_by_id(request, pk, val):
     if request.method == "GET":
-        url = 'http://127.0.0.1:8000/api/dealerships/' + pk +'/' + val + '/'
+        url = 'http://tkrug1.mybluemix.net/api/dealerships/' + pk +'/' + val + '/'
         print(url)
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
@@ -109,7 +109,7 @@ def get_dealerships_by_id(request, pk, val):
 
 def get_dealerships_by_state(request, val):
     if request.method == "GET":
-        url = 'http://127.0.0.1:8000/api/dealerships/state/' + val + '/'
+        url = 'http://tkrug1.mybluemix.net/api/dealerships/state/' + val + '/'
         # Get dealers from the URL
         dealerships = get_dealers_from_dict(url)
         states = get_dealerships_by_states_from_dict(url)
@@ -201,7 +201,7 @@ def add_review(request):
 
         review_id = str(request.GET.get('dealership'))
         print(review_id)
-        url = 'http://127.0.0.1:8000/api/reviews/dealership/' + review_id 
+        url = 'http://tkrug1.mybluemix.net/api/reviews/dealership/' + review_id 
         print(url)
         reviews = get_reviews_from_dict(url)
         form = CreateReviewForm()
