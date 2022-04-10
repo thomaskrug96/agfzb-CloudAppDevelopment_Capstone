@@ -71,7 +71,10 @@ def get_dealerships(request):
         # Get dealers from the URL
         dealerships = get_dealers_from_dict(url)
 
+        states = get_dealerships_by_states_from_dict(url)
+        #print(states)
         # Add relevant dealer info to list of dealer values
+
         dealers = {}
         for dealer in range(0, len(dealerships)):
             dealers[dealer] = {
@@ -81,12 +84,17 @@ def get_dealerships(request):
                 'city': dealerships[dealer].city,
                 'state': dealerships[dealer].st
             }
+        dealers = list(dealers.values())
 
-        context = {'dealers': list(dealers.values())}
+        context = {'dealers': dealers, 'states':states}
 
         return render(request, 'djangoapp/index.html', context)
         #return HttpResponse(dealerships)
+    if request.method == "POST":
 
+
+
+        
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships_by_id(request, pk, val):
     if request.method == "GET":
@@ -99,15 +107,29 @@ def get_dealerships_by_id(request, pk, val):
         # Return a list of dealer short name
         return HttpResponse(dealer_names)
 
-def get_dealerships_by_state(request, pk, val):
+def get_dealerships_by_state(request, val):
     if request.method == "GET":
-        url = 'http://127.0.0.1:8000/api/dealerships/' + pk +'/' + val + '/'
+        url = 'http://127.0.0.1:8000/api/dealerships/state/' + val + '/'
         # Get dealers from the URL
-        dealerships = get_dealers_from_cf(url)
-        # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
-        return HttpResponse(dealer_names)
+        dealerships = get_dealers_from_dict(url)
+        states = get_dealerships_by_states_from_dict(url)
+        #print(states)
+        # Add relevant dealer info to list of dealer values
+        dealers = {}
+        for dealer in range(0, len(dealerships)):
+            dealers[dealer] = {
+                'dealer_id': dealerships[dealer].dealer_id,
+                'name': dealerships[dealer].full_name,
+                'address': dealerships[dealer].address,
+                'city': dealerships[dealer].city,
+                'state': dealerships[dealer].st
+            }
+        dealers = list(dealers.values())
+        print('******DEALERS*******')
+        print(dealers)
+        context = {'dealers': dealers, 'states': states}
+
+        return render(request, 'djangoapp/index.html', context)
 
 def aboutPage(request):
     context = {}
@@ -155,7 +177,7 @@ def add_review(request):
             id = i+1
 
             # Get dealership id from url params
-            dealer_id = request.GET.get('id')
+            dealer_id = request.GET.get('dealership')
 
             # Initialize new document for POST request
             doc = {}
@@ -183,7 +205,5 @@ def add_review(request):
         print(url)
         reviews = get_reviews_from_dict(url)
         form = CreateReviewForm()
-        print('**************')
-        print(reviews)
         context = {'form':form, 'reviews':reviews, 'car_makes': car_makes, 'car_model': car_models}
         return render(request, 'djangoapp/add_review.html', context)

@@ -17,10 +17,7 @@
                 <form method="POST" action="">
                     {% csrf_token %}
                     <div>
-                        {{form.name}}
-                        {{form.review}}
-                        <p>Purchased?</p>
-                        {{form.purchase}}
+                        {{form.name}} {{form.review}} Purchased? {{form.purchase}}
                     </div>
                     <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
                 </form>

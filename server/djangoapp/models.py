@@ -26,7 +26,7 @@ class CarModel(models.Model):
         return self.name
 
 class CarDealer(models.Model):
-    def __init__(self, address, city, full_name, dealer_id, lat, long, short_name, st, zip):
+    def __init__(self, address, city, full_name, dealer_id, lat, long, short_name, state, st, zip):
         self.address = address
         self.city = city
         self.full_name = full_name
@@ -34,6 +34,7 @@ class CarDealer(models.Model):
         self.lat = lat
         self.long = long
         self.short_name = short_name
+        self.state = state
         self.st = st
         self.zip = zip
 
@@ -44,6 +45,7 @@ class CarDealer(models.Model):
     lat = models.FloatField(default=0)
     long = models.FloatField(default=0)
     short_name = models.CharField(max_length=200, null=True)
+    state = models.CharField(max_length=200, null=True)
     st = models.CharField(max_length=200, null=True)
     zip = models.IntegerField(default=0)
 

@@ -4,6 +4,9 @@ from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
 from django.contrib import admin
 
+
+state_names = ["Alaska", "Alabama", "Arkansas", "American Samoa", "Arizona", "California", "Colorado", "Connecticut", "District ", "of Columbia", "Delaware", "Florida", "Georgia", "Guam", "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", "Kentucky", "Louisiana", "Massachusetts", "Maryland", "Maine", "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", "North Carolina", "North Dakota", "Nebraska", "New Hampshire", "New Jersey", "New Mexico", "Nevada", "New York", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Puerto Rico", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Virginia", "Virgin Islands", "Vermont", "Washington", "Wisconsin", "West Virginia", "Wyoming"]
+
 def get_request(url, **kwargs):
     print("GET from {} ".format(url))
     try:
@@ -57,10 +60,10 @@ def get_dealers_from_dict(url, **kwargs):
                 lat=dealer_doc["lat"], 
                 long=dealer_doc["long"],
                 short_name=dealer_doc["short_name"],
+                state=dealer_doc["state"],
                 st=dealer_doc["st"], 
                 zip=dealer_doc["zip"]
             )
-
             results.append(dealer_obj)
     return results
 
@@ -108,6 +111,42 @@ def get_reviews_from_dict(url, **kwargs):
                 results[review_id][key] = value
         results = list(results.values())
     return results
+
+# This function was created for a dropdown menu that is no longer in use
+def get_dealerships_by_states_from_dict(url):
+    json_result = get_request(url)
+
+    # get all states in Cloudant DB and number of dealers in each state
+    if json_result:
+        states_from_db = {} # unsorted 
+        for dealership in range(0, len(json_result["rows"])):
+            state = json_result["rows"][dealership]["doc"]["state"]
+            print(state)
+            if state not in states_from_db:
+                states_from_db[state] = {}
+                states_from_db[state] = 1
+            else:
+                states_from_db[state] += 1
+
+        # map number of dealers in each state to sorted state_names array
+        # if state was not in db, return number of dealers for that state as 0
+        states = {}
+        for state in range(0, len(state_names)):
+            if state_names[state] in states_from_db:
+                states[state] = {
+                    'state': state_names[state],
+                    'num_dealers': states_from_db[state_names[state]]
+                }
+            else:
+                states[state] = {
+                    'state': state_names[state],
+                    'num_dealers': 0
+                }
+        states = list(states.values())
+        print(states)
+    return states
+
+
 
 # Create a `get_request` to make HTTP GET requests
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
