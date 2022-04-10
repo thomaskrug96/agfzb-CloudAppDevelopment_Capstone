@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['tkrug1.mybluemix.net', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'djangoapp.apps.DjangoappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'django_filters'
 ]
 
@@ -125,7 +125,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, '../staticroot')
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
 MEDIA_URL = '/media/'
